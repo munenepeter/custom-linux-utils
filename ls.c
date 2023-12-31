@@ -5,6 +5,15 @@
 #include <string.h>
 #include <errno.h>
 
+void print_help() {
+    printf(
+        "usage: custom-ls ls [OPTION]\n"
+        "List information about the FILEs in the current directory."
+        "Options are:\n"
+        "    --help: display what you are reading now\n"
+        );
+}
+
 void print_files_in_dir(const char* directory_path) {
     DIR* dir_path_p = opendir(directory_path);
 
@@ -31,9 +40,14 @@ void print_files_in_dir(const char* directory_path) {
 
 int main(int argc, char** argv) {
 
+    (void)argc;
+    (void)argv;
+
     //Open dir
-    const char* dir_path = ".";
-    print_files_in_dir(dir_path);
+   // const char* dir_path = ".";
+  //  print_files_in_dir(dir_path);
+
+    print_help();
 
     return 0;
 }
