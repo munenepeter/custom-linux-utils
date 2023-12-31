@@ -1,9 +1,11 @@
-#include <stdio.h>
-#include <stdlib.h>
 #include <sys/types.h>
 #include <dirent.h>
 #include <string.h>
 #include <errno.h>
+#include <unistd.h>
+#include <stdlib.h>
+#include <stdio.h>
+
 
 void print_help() {
     printf(
@@ -11,7 +13,7 @@ void print_help() {
         "List information about the FILEs in the current directory."
         "Options are:\n"
         "    --help: display what you are reading now\n"
-        );
+    );
 }
 
 void print_files_in_dir(const char* directory_path) {
@@ -40,14 +42,44 @@ void print_files_in_dir(const char* directory_path) {
 
 int main(int argc, char** argv) {
 
-    (void)argc;
-    (void)argv;
+ 
 
     //Open dir
    // const char* dir_path = ".";
   //  print_files_in_dir(dir_path);
 
-    print_help();
+    //print_help();
+
+    int flags, opt = 0;
+    int nsecs, tfnd = 0;
+
+
+    while ((opt = getopt(argc, argv, "ali:")) != -1) {
+        switch (opt) {
+        case 'n':
+            flags = 1;
+            break;
+        case 't':
+            nsecs = atoi(optarg);
+            tfnd = 1;
+            break;
+        default: /* '?' */
+            fprintf(stderr, "Usage: %s [-t nsecs] [-n] name\n",
+                argv[0]);
+            exit(EXIT_FAILURE);
+        }
+    }
+
+    printf("flags=%d; tfnd=%d; nsecs=%d; optind=%d\n",
+        flags, tfnd, nsecs, optind);
+
+    if (optind >= argc) {
+        fprintf(stderr, "Expected argument after options\n");
+        exit(EXIT_FAILURE);
+    }
+
+    printf("name argument = %s\n", argv[optind]);
+
 
     return 0;
 }
