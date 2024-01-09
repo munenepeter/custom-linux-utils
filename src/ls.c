@@ -5,6 +5,7 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <stdbool.h>
 
 
 #define DISPLAY_NORMAL 0
@@ -22,6 +23,11 @@ void print_help() {
         "Options are:\n"
         "    --help: display what you are reading now\n"
     );
+}
+
+bool str_starts_with(const char* haystack, const char* needle) {
+    if (strncmp(haystack, needle, strlen(needle)) == 0) return 1;
+    else return 0;
 }
 
 /*
@@ -53,7 +59,7 @@ void print_files_in_dir(const char* directory_path, int mode) {
     while (dir_entry != NULL) {
         switch (mode) {
         case DISPLAY_NORMAL:
-            if (strcmp(dir_entry->d_name, ".") == false || strcmp(dir_entry->d_name, "..") == false) {
+            if (strcmp(dir_entry->d_name, ".") != 0 || strcmp(dir_entry->d_name, "..") != 0) {
                 printf("%s\t", dir_entry->d_name);
             }
             break;
