@@ -6,7 +6,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdbool.h>
-
+#include <inttypes.h>
 
 #define DISPLAY_NORMAL 0
 #define DISPLAY_ALL 1
@@ -60,11 +60,18 @@ void print_files_in_dir(const char* directory_path, int mode) {
         switch (mode) {
         case DISPLAY_NORMAL:
             if (strcmp(dir_entry->d_name, ".") != 0 || strcmp(dir_entry->d_name, "..") != 0) {
-                printf("%s\t", dir_entry->d_name);
+                if (!str_starts_with(dir_entry->d_name, ".")) {
+                    printf("%s\t", dir_entry->d_name);
+                }
             }
             break;
         case DISPLAY_LIST:
-            printf("%s", dir_entry->d_name);
+            if (strcmp(dir_entry->d_name, ".") != 0 || strcmp(dir_entry->d_name, "..") != 0) {
+                if (!str_starts_with(dir_entry->d_name, ".")) {
+
+                    printf("%ju %s\n", (uintmax_t)dir_entry->d_ino, dir_entry->d_name);
+                }
+            }
             break;
         case DISPLAY_ALL:
             break;
@@ -86,7 +93,7 @@ int main(int argc, char** argv) {
 
     //print_help();
 
-    if (argc < 2) print_files_in_dir(dir_path, DISPLAY_NORMAL);
+    if (argc < 2) print_files_in_dir(dir_path, DISPLAY_LIST);
 
 
     return 0;
