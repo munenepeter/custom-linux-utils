@@ -9,6 +9,9 @@
 
 #define DISPLAY_NORMAL 0
 #define DISPLAY_ALL 1
+#define DISPLAY_LIST 2
+#define DISPLAY_WHAT 3
+
 
 
 
@@ -21,6 +24,14 @@ void print_help() {
     );
 }
 
+/*
+| Seems like i can't sort my entries cause of:
+|
+| The order in which filenames are read by successive
+| calls to readdir() depends on the filesystem  implementation;
+| it is unlikely that the names will be sorted in any fashion.
+|
+*/
 void print_files_in_dir(const char* directory_path, int mode) {
     DIR* dir_path_p = opendir(directory_path);
 
@@ -41,10 +52,16 @@ void print_files_in_dir(const char* directory_path, int mode) {
     //list items
     while (dir_entry != NULL) {
         switch (mode) {
-        case 1:
+        case DISPLAY_NORMAL:
+            if (strcmp(dir_entry->d_name, ".") == false || strcmp(dir_entry->d_name, "..") == false) {
+                printf("%s\t", dir_entry->d_name);
+            }
+            break;
+        case DISPLAY_LIST:
             printf("%s", dir_entry->d_name);
             break;
-
+        case DISPLAY_ALL:
+            break;
         default:
             printf("%s", dir_entry->d_name);;
         }
@@ -63,7 +80,7 @@ int main(int argc, char** argv) {
 
     //print_help();
 
-    if (argc < 2) print_files_in_dir(dir_path, NULL);
+    if (argc < 2) print_files_in_dir(dir_path, DISPLAY_NORMAL);
 
 
     return 0;
