@@ -11,16 +11,16 @@
 #define DISPLAY_NORMAL 0
 #define DISPLAY_ALL 1
 #define DISPLAY_LIST 2
-#define DISPLAY_WHAT 3
-
-
+#define DISPLAY_UNDEFINED 3
 
 
 void print_help() {
     printf(
         "usage: custom-ls ls [OPTION]\n"
-        "List information about the FILEs in the current directory."
+        "List information about the  in the current directory."
         "Options are:\n"
+        "    --list: display current directory's content in a list\n"
+        "    --all: display current directory's all info & hidden files\n"
         "    --help: display what you are reading now\n"
     );
 }
@@ -31,7 +31,7 @@ bool str_starts_with(const char* haystack, const char* needle) {
 }
 
 /*
-| Seems like i can't sort my entries cause of:
+| Seems like i can't sort my entries cause of how readdir is implemented
 |
 | The order in which filenames are read by successive
 | calls to readdir() depends on the filesystem  implementation;
@@ -68,7 +68,6 @@ void print_files_in_dir(const char* directory_path, int mode) {
         case DISPLAY_LIST:
             if (strcmp(dir_entry->d_name, ".") != 0 || strcmp(dir_entry->d_name, "..") != 0) {
                 if (!str_starts_with(dir_entry->d_name, ".")) {
-
                     printf("%ju %s\n", (uintmax_t)dir_entry->d_ino, dir_entry->d_name);
                 }
             }
