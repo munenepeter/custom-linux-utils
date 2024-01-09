@@ -7,6 +7,11 @@
 #include <stdio.h>
 
 
+#define DISPLAY_NORMAL 0
+#define DISPLAY_ALL 1
+
+
+
 void print_help() {
     printf(
         "usage: custom-ls ls [OPTION]\n"
@@ -16,7 +21,7 @@ void print_help() {
     );
 }
 
-void print_files_in_dir(const char* directory_path) {
+void print_files_in_dir(const char* directory_path, int mode) {
     DIR* dir_path_p = opendir(directory_path);
 
     if (dir_path_p == NULL) {
@@ -35,50 +40,30 @@ void print_files_in_dir(const char* directory_path) {
     }
     //list items
     while (dir_entry != NULL) {
-        printf("file: %s\n", dir_entry->d_name);
+        switch (mode) {
+        case 1:
+            printf("%s", dir_entry->d_name);
+            break;
+
+        default:
+            printf("%s", dir_entry->d_name);;
+        }
+
         dir_entry = readdir(dir_path_p);
     }
 }
 
 int main(int argc, char** argv) {
 
- 
+    (void)argv;
+
 
     //Open dir
-   // const char* dir_path = ".";
-  //  print_files_in_dir(dir_path);
+    const char* dir_path = ".";
 
     //print_help();
 
-    int flags, opt = 0;
-    int nsecs, tfnd = 0;
-
-
-    while ((opt = getopt(argc, argv, "ali:")) != -1) {
-        switch (opt) {
-        case 'n':
-            flags = 1;
-            break;
-        case 't':
-            nsecs = atoi(optarg);
-            tfnd = 1;
-            break;
-        default: /* '?' */
-            fprintf(stderr, "Usage: %s [-t nsecs] [-n] name\n",
-                argv[0]);
-            exit(EXIT_FAILURE);
-        }
-    }
-
-    printf("flags=%d; tfnd=%d; nsecs=%d; optind=%d\n",
-        flags, tfnd, nsecs, optind);
-
-    if (optind >= argc) {
-        fprintf(stderr, "Expected argument after options\n");
-        exit(EXIT_FAILURE);
-    }
-
-    printf("name argument = %s\n", argv[optind]);
+    if (argc < 2) print_files_in_dir(dir_path, NULL);
 
 
     return 0;
