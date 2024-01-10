@@ -11,9 +11,18 @@ function cat(files):
 
 */
 
-void cat(char *file, int number_of_files){
-    for(size_t i = 0; i < number_of_files; ++i){
-        FILE *file = fopen();
+void cat(char *files[], int number_of_files){
+    for(int i = 0; i < number_of_files; ++i){
+        FILE *file = fopen(files[i], "r");
+        
+        if(file == NULL){
+            fprintf(stderr, "E: could not open file %s:%s", files[i], errno); 
+            return 1;
+        }
+        
+        while(){
+            
+        }
     }
 }
 int main(int argc, char** argv) {
