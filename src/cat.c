@@ -18,9 +18,10 @@ void cat(char *files[], int number_of_files){
         fclose(file);
     }
 }
-int main(int argc, char** argv) {
+int main(int argc, char* argv[]) {
    if (argc < 2) {
-        printf("Usage: %s file1 file2 ... fileN\n", argv[0]);
+       printf(
+        "usage: %s file1 [file2, file3, ....]\n List information about the  in the current directory.", argv[0]);
         return 1;
     }
 
