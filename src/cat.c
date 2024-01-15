@@ -1,15 +1,5 @@
 #include <stdio.h>
 #include <stdlib.h>
-/*
-function cat(files):
-    for each file in files:
-        open file
-        while not end of file:
-            read line from file
-            print line
-        close file
-
-*/
 
 void cat(char *files[], int number_of_files){
     for(int i = 0; i < number_of_files; ++i){
@@ -20,16 +10,21 @@ void cat(char *files[], int number_of_files){
             return 1;
         }
         
-        while(){
-            
+        char line[256];
+        while (fgets(line, sizeof(line), file) != NULL) {
+            printf("%s", line);
         }
+
+        fclose(file);
     }
 }
 int main(int argc, char** argv) {
-    (void)argc;
-    (void)argv;
+   if (argc < 2) {
+        printf("Usage: %s file1 file2 ... fileN\n", argv[0]);
+        return 1;
+    }
 
-    printf("I am a duplicate implementation of the cat command");
+    cat(argv + 1, argc - 1);
 
     return 0;
 }
